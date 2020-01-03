@@ -1,0 +1,22 @@
+{
+  "name": "node-js-line-bot",
+  "version": "0.1.0",
+  "description": "A sample Node.js linebot app",
+  "engines": {
+    "node": "8.9.1"
+  },
+  "dependencies": {
+    "linebot": "^1.3.0",
+    "express": "^4.15.2",
+    "ejs": "^2.5.7",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2"
+  },
+  "keywords": [
+    "linebot",
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT"
+}
