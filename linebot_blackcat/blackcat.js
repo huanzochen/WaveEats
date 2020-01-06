@@ -47,7 +47,10 @@ bot.on('follow', function (event) {
           user = {
             id:event.source.userId,
             displayName:profile.displayName,
-            terms:false
+            terms:false,
+            phoneValidate:false,
+            recipient:null,
+            sender:null 
           }
           userList = userList.concat([{
             user:user
@@ -79,12 +82,6 @@ bot.on('follow', function (event) {
       });
     }
 
-
-
-
-
-
-
   });
 });
 
@@ -109,7 +106,9 @@ bot.on('message', function (event) {
             id:event.source.userId,
             displayName:profile.displayName,
             terms:false,
-            phoneValidate:false
+            phoneValidate:false,
+            recipientDate:null,
+            senderDate:null 
           }
           // 加入歷史資料集中
           userList = userList.concat([{
@@ -125,7 +124,7 @@ bot.on('message', function (event) {
           console.log("有同名的使用者!!請聯繫開發者!");
         }
 
-        /** 語意判定區域 同意條款才會進來 */
+        /** 同意條款才會進來 */
         if(user.terms){
 
           /** 手機驗證區 */
@@ -183,6 +182,7 @@ bot.on('message', function (event) {
 
           /** 手機驗證成功後才會進來 */
           if(user.phoneValidate){
+
             if(event.message.text == "設定" ){
               event.reply([
                 {type: 'text', text: "設定-寄件人完成！"},
@@ -216,55 +216,161 @@ bot.on('message', function (event) {
                 console.log('Error', error);
               });
             }
-            
-            event.reply({
-              type: 'template',
-              altText: 'this is a carousel template',
-              template: {
-                type: 'carousel',
-                columns: [{
-                  thumbnailImageUrl: 'https://example.com/bot/images/item1.jpg',
-                  title: 'this is menu',
-                  text: 'description',
-                  actions: [{
-                    type: 'postback',
-                    label: 'Buy',
-                    data: 'action=buy&itemid=111'
+            else if(event.message.text == "寄件" ){
+              event.reply([
+                {
+                  type: 'template',
+                  altText: '寄件選單',
+                  template: {
+                    type: 'buttons',
+                    thumbnailImageUrl: 'https://example.com/bot/images/image.jpg',
+                    title: '選擇常用收件地址',
+                    text: '請選擇常用收件地址',
+                    actions: [{
+                      type: 'message',
+                      label: '常用收件地址',
+                      text: '常用收件地址'
+                    }, {
+                      type: 'message',
+                      label: '設定常用收件地址',
+                      text: '設定常用收件地址'
+                    }, {
+                      type: 'message',
+                      label: '直接輸入',
+                      text: '直接輸入'
+                    }]
+                  }
+                }
+              ]).then(function (data) {
+                console.log('Success', data);
+              }).catch(function (error) {
+                console.log('Error', error);
+              });
+            }
+            else if(event.message.text == "直接輸入" ){
+              event.reply([
+                {type: 'text', text: "您好！請輸入收件地址以及資訊。\n例如：李曉明/09XX XXX XXX/台北市XX區XXX路XX號XX樓"}
+              ]).then(function (data) {
+                console.log('Success', data);
+              }).catch(function (error) {
+                console.log('Error', error);
+              });
+            }
+
+            // 收件者輸入地址檢核
+            else if(event.message.text.match(/[\u4e00-\u9fa5]{1,15}\/09\d{8}\/[\u4e00-\u9fa5]{1,500}/)){
+              user.recipient = event.message.text; 
+              event.reply([
+                {
+                  type: 'template',
+                  altText: '選擇日期畫面',
+                  template: {
+                    type: 'buttons',
+                    thumbnailImageUrl: 'https://example.com/bot/images/image.jpg',
+                    title: '選擇日期',
+                    text: '請選擇寄件.到達日期',
+                    actions: [{
+                      type: "datetimepicker",
+                      "label": "選擇-寄件日期",
+                      "data": "recipientDate",
+                      "mode": "date"
+                    }, {
+                      type: "datetimepicker",
+                      "label": "選擇-到達日期",
+                      "data": "senderDate",
+                      "mode": "date"
+                    }]
+                  }
+                }
+              ]).then(function (data) {
+                console.log('Success', data);
+              }).catch(function (error) {
+                console.log('Error', error);
+              });
+            }
+            /*
+            else if(event.message.text == ("選擇-寄件日期" || "選擇-到達日期")){
+              event.reply([
+                {
+                  "type": "template",
+                  "altText": "選擇-日期",
+                  "template": {
+                      "type": "image_carousel",
+                      "columns": [
+                          {
+                            "imageUrl": "https://static.pexels.com/photos/126407/pexels-photo-126407.jpeg",
+                            "action": {
+                              "type": "datetimepicker",
+                              "label": "選日期",
+                              "data": "q1",
+                              "mode": "date"
+                            }
+                          }
+                      ]
+                  }
+                }
+              ]).then(function (data) {
+                console.log('Success', data);
+              }).catch(function (error) {
+                console.log('Error', error);
+              });
+            }
+            */
+
+            if(user.senderDate != null && user.recipientDate != null){
+              sadadaassa
+            }
+
+            else
+            {
+              // 常規用戶選單
+              event.reply({
+                type: 'template',
+                altText: '用戶選單',
+                template: {
+                  type: 'carousel',
+                  columns: [{
+                    thumbnailImageUrl: 'https://example.com/bot/images/item1.jpg',
+                    title: '統智科技你好!',
+                    text: '歡迎使用黑貓預約寄件服務，請選擇以下的服務',
+                    actions: [{
+                      type: 'message',
+                      label: '常用地址寄件',
+                      text: '常用地址寄件'
+                    }, {
+                      type: 'message',
+                      label: '寄件',
+                      text: '寄件'
+                    }, {
+                      type: 'message',
+                      label: '設定',
+                      text: '設定'
+                    }]
                   }, {
-                    type: 'postback',
-                    label: 'Add to cart',
-                    data: 'action=add&itemid=111'
-                  }, {
-                    type: 'uri',
-                    label: 'View detail',
-                    uri: 'http://example.com/page/111'
+                    thumbnailImageUrl: 'https://example.com/bot/images/item2.jpg',
+                    title: '其他服務',
+                    text: '請選擇以下的服',
+                    actions: [{
+                      type: 'message',
+                      label: '看不見',
+                      text: '看不見'
+                    }, {
+                      type: 'message',
+                      label: '看不見',
+                      text: '看不見'
+                    }, {
+                      type: 'message',
+                      label: '看不見',
+                      text: '看不見'
+                    }]
                   }]
-                }, {
-                  thumbnailImageUrl: 'https://example.com/bot/images/item2.jpg',
-                  title: 'this is menu',
-                  text: 'description',
-                  actions: [{
-                    type: 'postback',
-                    label: 'Buy',
-                    data: 'action=buy&itemid=222'
-                  }, {
-                    type: 'postback',
-                    label: 'Add to cart',
-                    data: 'action=add&itemid=222'
-                  }, {
-                    type: 'uri',
-                    label: 'View detail',
-                    uri: 'http://example.com/page/222'
-                  }]
-                }]
-              }
-            });
-
-
-
+                }
+              });
+            }
           }
-
+          /** 手機驗證成功後才會進來 結束 */
         }
+        /** 同意條款才會進來 結束*/
 
         /** 預設條款 */
         if(event.message.text == "我同意"){
@@ -313,21 +419,24 @@ bot.on('message', function (event) {
           }).catch(function (error) {
             console.log('Error', error);
           });
-
-          ////////////////////////////////////////////dev//////////////////////////////
-          if(event.message.text == "h"){
-            user.terms = true;
-            user.phoneValidate = true;
-            event.reply([
-              { type: 'text', text: "你作弊!!" }
-            ]).then(function (data) {
-              console.log('Success', data);
-            }).catch(function (error) {
-              console.log('Error', error);
-            });
-          }
-          ////////////////////////////////////////////dev//////////////////////////////
         }
+        /** 預設條款 結束 */
+        
+
+        ////////////////////////////////////////////dev//////////////////////////////
+        if(event.message.text == "h"){
+          user.terms = true;
+          user.phoneValidate = true;
+          event.reply([
+            { type: 'text', text: "你作弊!!" }
+          ]).then(function (data) {
+            console.log('Success', data);
+          }).catch(function (error) {
+            console.log('Error', error);
+          });
+        }
+        ////////////////////////////////////////////dev//////////////////////////////
+        
 
         console.dir("///////////////debug reply/////////");
         console.dir("event:");
@@ -360,6 +469,116 @@ bot.on('message', function (event) {
 
   });
 });
+
+bot.on('postback', function (event) {
+  event.source.profile().then(function (profile) {
+    if(event.source.type == 'user'){
+      var validate = new Promise( (resolve, reject) => {
+        var current = userList.filter(function(item, index, array){
+        return item.user.displayName ==  profile.displayName;
+        });
+        resolve(current);
+      });
+      validate.then(current => {
+        if(Object.keys(current).length > 0){
+          console.log("驗證使用者資料已存在_加入類");
+        }
+        else if(Object.keys(current).length == 0){
+          console.log("驗證使用者資料不存在-加入新資料_加入類");
+          user = {
+            id:event.source.userId,
+            displayName:profile.displayName,
+            terms:false,
+            phoneValidate:false,
+            recipient:null,
+            sender:null 
+          }
+          userList = userList.concat([{
+            user:user
+          }]);
+        }
+
+        // 判斷是寄件日期還是收件日期
+        if(event.postback.data == "recipientDate"){
+          user.recipientDate = event.postback.params.date;
+          event.reply([
+            {type: 'text', text: "寄件日期:" + event.postback.params.date}
+          ]).then(function (data) {
+            console.log('Success', data);
+          }).catch(function (error) {
+            console.log('Error', error);
+          });
+        }
+        else if(event.postback.data == "senderDate"){
+          user.senderDate = event.postback.params.date;
+          event.reply([
+            {type: 'text', text: "到達日期:" + event.postback.params.date}
+          ]).then(function (data) {
+            console.log('Success', data);
+          }).catch(function (error) {
+            console.log('Error', error);
+          });
+        }
+
+        if(user.senderDate != null && user.recipientDate != null){
+          event.reply([
+            {
+              type: 'template',
+              altText: '配達時段',
+              template: {
+                type: 'buttons',
+                title: '請選擇配達時段',
+                text: '選擇配達',
+                actions: [{
+                  type: 'message',
+                  label: '不指定',
+                  text: '不指定'
+                }, {
+                  type: 'message',
+                  label: '13時以前',
+                  text: '13時以前'
+                }, {
+                  type: 'message',
+                  label: '14-18時',
+                  text: '14-18時'
+                }]
+              }
+            }
+          ]).then(function (data) {
+            console.log('Success', data);
+          }).catch(function (error) {
+            console.log('Error', error);
+          });
+        }
+        
+        /*
+        event.reply([
+          {type: 'text', text: event.postback.params.date}
+        ]).then(function (data) {
+          console.log('Success', data);
+        }).catch(function (error) {
+          console.log('Error', error);
+        });
+        */
+
+        console.dir("///////////////debug push/////////");
+        console.dir("event:");
+        console.dir(event);
+        console.dir("userList");
+        console.dir(userList);
+        console.dir(Object.keys(userList));
+    
+    
+        console.dir("profile");
+        console.dir(profile);
+        console.dir("////////////////////////");
+
+      }, reason => {
+          console.log(reason); // Error!
+      });
+    }
+  });
+})
 
 /*
 if(event.message.text.indexOf("宏") >= 0) {
