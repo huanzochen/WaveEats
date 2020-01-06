@@ -50,7 +50,10 @@ bot.on('follow', function (event) {
             terms:false,
             phoneValidate:false,
             recipient:null,
-            sender:null 
+            recipientDate:null,
+            senderDate:null,
+            senderDateDesign:null,
+            propType:null
           }
           userList = userList.concat([{
             user:user
@@ -107,8 +110,11 @@ bot.on('message', function (event) {
             displayName:profile.displayName,
             terms:false,
             phoneValidate:false,
+            recipient:null,
             recipientDate:null,
-            senderDate:null 
+            senderDate:null,
+            senderDateDesign:null,
+            propType:null
           }
           // 加入歷史資料集中
           userList = userList.concat([{
@@ -123,6 +129,56 @@ bot.on('message', function (event) {
         else if(Object.keys(current).length > 1){
           console.log("有同名的使用者!!請聯繫開發者!");
         }
+
+        /** 預設條款 */
+        if(event.message.text == "我同意"){
+          user.terms = true;
+          event.reply([
+            { type: 'text', text: "感謝您同意本公司的使用者條款以及隱私權聲明。" },
+            { type: 'text', text: "歡迎使用黑貓! 請先輸入您的手機號碼完成認證。\n(例如：09XX XXX XXX)" }
+          ]).then(function (data) {
+            console.log('Success', data);
+          }).catch(function (error) {
+            console.log('Error', error);
+          });
+        }
+
+        if(!user.terms && event.message.text != "我同意"){
+          event.reply([
+            { type: 'text', text: "黑貓宅急便 寄件超簡單，讓你輕鬆預約叫件，最終會給予QR Code,須自行至7-11,OK超商印出託運單" },
+            {
+              type: 'template',
+              altText: '使用者條款',
+              template: {
+                type: 'buttons',
+                title: '使用者條款',
+                text: '點選"我同意"即代表您已詳閱.了解，並同意本公司的使用者條款以及隱私權聲明內之相關使用者規範',
+                actions: [{
+                  type: 'uri',
+                  label: '使用者條款',
+                  uri: 'https://www.google.com.tw'
+                }, {
+                  type: 'uri',
+                  label: '隱私權聲明',
+                  uri: 'https://fb.com'
+                }, {
+                  type: 'message',
+                  label: '我同意',
+                  text: '我同意'
+                }, {
+                  type: 'message',
+                  label: '取消',
+                  text: '取消'
+                }]
+              }
+            }
+          ]).then(function (data) {
+            console.log('Success', data);
+          }).catch(function (error) {
+            console.log('Error', error);
+          });
+        }
+        /** 預設條款 結束 */
 
         /** 同意條款才會進來 */
         if(user.terms){
@@ -155,7 +211,9 @@ bot.on('message', function (event) {
             });
           }
           else if(event.message.text == "123456" && !user.phoneValidate){
-            user.phoneValidate == true;
+            console.log("123456");
+            console.log(user);
+            user.phoneValidate = true;
             event.reply([
               {type: 'text', text: "認證完成"},
               {
@@ -182,6 +240,56 @@ bot.on('message', function (event) {
 
           /** 手機驗證成功後才會進來 */
           if(user.phoneValidate){
+
+            /** 已填寫寄件人、收件人地址 */
+            if(user.senderDate != null && user.recipientDate != null){
+
+              if( event.message.text == "不指定" || event.message.text == "13時以前" || event.message.text == "14-18時"){
+                user.senderDateDesign == event.message.text;
+                event.reply([
+                  {
+                    type: 'template',
+                    altText: '請選擇物品內容',
+                    template: {
+                      type: 'confirm',
+                      text: '選擇內容',
+                      actions: [{
+                        type: 'message',
+                        label: '易碎物品',
+                        text: '易碎物品'
+                      }, {
+                        type: 'message',
+                        label: '精密儀器',
+                        text: '精密儀器'
+                      }, {
+                        type: 'message',
+                        label: '其他',
+                        text: '其他'
+                      }]
+                    }
+                  }
+                ]).then(function (data) {
+                  console.log('Success', data);
+                }).catch(function (error) {
+                  console.log('Error', error);
+                });
+              }
+              if( event.message.text == "易碎物品" || event.message.text == "精密儀器" || event.message.text == "其他"){
+                user.propType == event.message.text;
+                event.reply([
+                  {
+                    type: 'text',
+                    text: "您好！請選擇內容類別\n1.其他\n2.文件\n3.家電3C\n4.水果\n5.麵粉"
+                  }
+                ]).then(function (data) {
+                  console.log('Success', data);
+                }).catch(function (error) {
+                  console.log('Error', error);
+                });
+              }
+
+
+            }
 
             if(event.message.text == "設定" ){
               event.reply([
@@ -317,10 +425,6 @@ bot.on('message', function (event) {
             }
             */
 
-            if(user.senderDate != null && user.recipientDate != null){
-              sadadaassa
-            }
-
             else
             {
               // 常規用戶選單
@@ -371,56 +475,6 @@ bot.on('message', function (event) {
           /** 手機驗證成功後才會進來 結束 */
         }
         /** 同意條款才會進來 結束*/
-
-        /** 預設條款 */
-        if(event.message.text == "我同意"){
-          user.terms = true;
-          event.reply([
-            { type: 'text', text: "感謝您同意本公司的使用者條款以及隱私權聲明。" },
-            { type: 'text', text: "歡迎使用黑貓! 請先輸入您的手機號碼完成認證。\n(例如：09XX XXX XXX)" }
-          ]).then(function (data) {
-            console.log('Success', data);
-          }).catch(function (error) {
-            console.log('Error', error);
-          });
-        }
-
-        if(!user.terms && event.message.text != "我同意"){
-          event.reply([
-            { type: 'text', text: "黑貓宅急便 寄件超簡單，讓你輕鬆預約叫件，最終會給予QR Code,須自行至7-11,OK超商印出託運單" },
-            {
-              type: 'template',
-              altText: '使用者條款',
-              template: {
-                type: 'buttons',
-                title: '使用者條款',
-                text: '點選"我同意"即代表您已詳閱.了解，並同意本公司的使用者條款以及隱私權聲明內之相關使用者規範',
-                actions: [{
-                  type: 'uri',
-                  label: '使用者條款',
-                  uri: 'https://www.google.com.tw'
-                }, {
-                  type: 'uri',
-                  label: '隱私權聲明',
-                  uri: 'https://fb.com'
-                }, {
-                  type: 'message',
-                  label: '我同意',
-                  text: '我同意'
-                }, {
-                  type: 'message',
-                  label: '取消',
-                  text: '取消'
-                }]
-              }
-            }
-          ]).then(function (data) {
-            console.log('Success', data);
-          }).catch(function (error) {
-            console.log('Error', error);
-          });
-        }
-        /** 預設條款 結束 */
         
 
         ////////////////////////////////////////////dev//////////////////////////////
@@ -491,7 +545,10 @@ bot.on('postback', function (event) {
             terms:false,
             phoneValidate:false,
             recipient:null,
-            sender:null 
+            recipientDate:null,
+            senderDate:null,
+            senderDateDesign:null,
+            propType:null
           }
           userList = userList.concat([{
             user:user
