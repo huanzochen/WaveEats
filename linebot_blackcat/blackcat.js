@@ -34,7 +34,7 @@ bot.on('follow', function (event) {
     if(event.source.type == 'user'){
       var validate = new Promise( (resolve, reject) => {
         var current = userList.filter(function(item, index, array){
-        return item.user.displayName ==  profile.displayName;
+          return item.user.displayName ==  profile.displayName;
         });
         resolve(current);
       });
@@ -91,9 +91,12 @@ bot.on('follow', function (event) {
 bot.on('message', function (event) {
   event.source.profile().then(function (profile) {
     if(event.source.type == 'user'){
+      console.log("user");
       var validate = new Promise( (resolve, reject) => {
         var current = userList.filter(function(item, index, array){
-        return item.user.displayName ==  profile.displayName;
+          console.dir("validate item");
+          console.dir(item);
+          return item.user.displayName ==  profile.displayName;
         });
         resolve(current);
       });
@@ -478,11 +481,72 @@ bot.on('message', function (event) {
         
 
         ////////////////////////////////////////////dev//////////////////////////////
-        if(event.message.text == "h"){
+        if(event.message.text == "dev"){
+          event.reply([
+            {
+              type: 'template',
+              altText: 'dev',
+              template: {
+                type: 'buttons',
+                title: '恭喜你!!',
+                text: '打開了神祕小選單，請問您要?',
+                actions: [{
+                  type: 'message',
+                  label: '作弊',
+                  text: 'SystemCall.Cheat'
+                }, {
+                  type: 'message',
+                  label: '忘了一切',
+                  text: 'SystemCall.Reset'
+                }]
+              }
+            }
+          ]).then(function (data) {
+            console.log('Success', data);
+          }).catch(function (error) {
+            console.log('Error', error);
+          });
+        }
+        if(event.message.text == "SystemCall.Cheat"){
           user.terms = true;
           user.phoneValidate = true;
           event.reply([
-            { type: 'text', text: "你作弊!!" }
+            { type: 'text', text: "你作弊!!(通過條款、電話驗證)" }
+          ]).then(function (data) {
+            console.log('Success', data);
+          }).catch(function (error) {
+            console.log('Error', error);
+          });
+        }
+        if(event.message.text == "SystemCall.Reset"){
+          user = {
+            id:event.source.userId,
+            displayName:profile.displayName,
+            terms:false,
+            phoneValidate:false,
+            recipient:null,
+            recipientDate:null,
+            senderDate:null,
+            senderDateDesign:null,
+            propType:null
+          }
+          userList.splice(userList.findIndex(e => e.id === profile.userId), 1);
+          // 加入歷史資料集中
+          userList = userList.concat([{
+            user:user
+          }]);
+          /*
+          user.terms=false;
+          user.phoneValidate=false;
+          user.recipient=null;
+          user.recipientDate=null;
+          user.senderDate=null;
+          user.senderDateDesign=null;
+          user.propType=null;
+          */
+
+          event.reply([
+            { type: 'text', text: "什麼都忘了...!!(狀態已重置)" }
           ]).then(function (data) {
             console.log('Success', data);
           }).catch(function (error) {
@@ -504,6 +568,8 @@ bot.on('message', function (event) {
         console.dir(profile);
         console.dir("userList");
         console.dir(userList);
+        console.dir("user");
+        console.dir(user);
         console.dir("////////////////////////");
 
       }, reason => {
