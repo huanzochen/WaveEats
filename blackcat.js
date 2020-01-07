@@ -52,7 +52,7 @@ bot.on('follow', function (event) {
             recipient:null,
             recipientDate:null,
             senderDate:null,
-            senderDateDesign:null,
+            senderDateAssign:null,
             propType:null
           }
           userList = userList.concat([{
@@ -91,6 +91,104 @@ bot.on('follow', function (event) {
 bot.on('message', function (event) {
   event.source.profile().then(function (profile) {
     if(event.source.type == 'user'){
+
+      ////////////////////////////////////////////dev//////////////////////////////
+      if(event.message.text == "dev"){
+        event.reply([
+          {
+            type: 'template',
+            altText: 'dev',
+            template: {
+              type: 'buttons',
+              title: '恭喜你!!',
+              text: '打開了神祕小選單，請問您要?',
+              actions: [{
+                type: 'message',
+                label: '小作弊(同意條款、電話驗證)',
+                text: 'SystemCall.Cheat'
+              },{
+                type: 'message',
+                label: '大作弊(小作弊、收寄件日期))',
+                text: 'SystemCall.CheatAll'
+              }, {
+                type: 'message',
+                label: '忘了一切(重置)',
+                text: 'SystemCall.Reset'
+              }]
+            }
+          }
+        ]).then(function (data) {
+          console.log('Success', data);
+        }).catch(function (error) {
+          console.log('Error', error);
+        });
+      }
+      if(event.message.text == "SystemCall.Cheat"){
+        event.reply([
+          { type: 'text', text: "你作弊!!(通過條款、電話驗證)" }
+        ]).then(function (data) {
+          user.terms = true;
+          user.phoneValidate = true;
+          console.log('Success', data);
+        }).catch(function (error) {
+          console.log('Error', error);
+        });
+      }
+      if(event.message.text == "SystemCall.CheatAll"){
+        event.reply([
+          { type: 'text', text: "你作弊!!(通過條款、電話驗證)" }
+        ]).then(function (data) {
+          user.terms = true;
+          user.phoneValidate = true;
+          user.recipientDate = '2020-01-07';
+          user.senderDate = '2020-01-07';
+          console.log('Success', data);
+        }).catch(function (error) {
+          console.log('Error', error);
+        });
+      }
+      if(event.message.text == "SystemCall.Reset"){
+        user = {
+          id:event.source.userId,
+          displayName:profile.displayName,
+          terms:false,
+          phoneValidate:false,
+          recipient:null,
+          recipientDate:null,
+          senderDate:null,
+          senderDateAssign:null,
+          propType:null
+        }
+        userList.splice(userList.findIndex(e => e.id === profile.userId), 1);
+        // 加入歷史資料集中
+        userList = userList.concat([{
+          user:user
+        }]);
+        /*
+        user.terms=false;
+        user.phoneValidate=false;
+        user.recipient=null;
+        user.recipientDate=null;
+        user.senderDate=null;
+        user.senderDateAssign=null;
+        user.propType=null;
+        */
+
+        event.reply([
+          { type: 'text', text: "什麼都忘了...!!(狀態已重置)" }
+        ]).then(function (data) {
+          console.log('Success', data);
+        }).catch(function (error) {
+          console.log('Error', error);
+        });
+      }
+      ////////////////////////////////////////////dev//////////////////////////////
+
+
+
+
+
+
       console.log("user");
       var validate = new Promise( (resolve, reject) => {
         var current = userList.filter(function(item, index, array){
@@ -116,7 +214,7 @@ bot.on('message', function (event) {
             recipient:null,
             recipientDate:null,
             senderDate:null,
-            senderDateDesign:null,
+            senderDateAssign:null,
             propType:null
           }
           // 加入歷史資料集中
@@ -215,8 +313,6 @@ bot.on('message', function (event) {
           }
           else if(event.message.text == "123456" && !user.phoneValidate){
             console.log("123456");
-            console.log(user);
-            user.phoneValidate = true;
             event.reply([
               {type: 'text', text: "認證完成"},
               {
@@ -235,7 +331,9 @@ bot.on('message', function (event) {
                 }
               }
             ]).then(function (data) {
+              user.phoneValidate = true;
               console.log('Success', data);
+              console.log(user);
             }).catch(function (error) {
               console.log('Error', error);
             });
@@ -248,7 +346,7 @@ bot.on('message', function (event) {
             if(user.senderDate != null && user.recipientDate != null){
 
               if( event.message.text == "不指定" || event.message.text == "13時以前" || event.message.text == "14-18時"){
-                user.senderDateDesign == event.message.text;
+                user.senderDateAssign = event.message.text;
                 event.reply([
                   {
                     type: 'template',
@@ -278,7 +376,7 @@ bot.on('message', function (event) {
                 });
               }
               if( event.message.text == "易碎物品" || event.message.text == "精密儀器" || event.message.text == "其他"){
-                user.propType == event.message.text;
+                user.propType = event.message.text;
                 event.reply([
                   {
                     type: 'text',
@@ -399,34 +497,6 @@ bot.on('message', function (event) {
                 console.log('Error', error);
               });
             }
-            /*
-            else if(event.message.text == ("選擇-寄件日期" || "選擇-到達日期")){
-              event.reply([
-                {
-                  "type": "template",
-                  "altText": "選擇-日期",
-                  "template": {
-                      "type": "image_carousel",
-                      "columns": [
-                          {
-                            "imageUrl": "https://static.pexels.com/photos/126407/pexels-photo-126407.jpeg",
-                            "action": {
-                              "type": "datetimepicker",
-                              "label": "選日期",
-                              "data": "q1",
-                              "mode": "date"
-                            }
-                          }
-                      ]
-                  }
-                }
-              ]).then(function (data) {
-                console.log('Success', data);
-              }).catch(function (error) {
-                console.log('Error', error);
-              });
-            }
-            */
 
             else
             {
@@ -478,82 +548,6 @@ bot.on('message', function (event) {
           /** 手機驗證成功後才會進來 結束 */
         }
         /** 同意條款才會進來 結束*/
-        
-
-        ////////////////////////////////////////////dev//////////////////////////////
-        if(event.message.text == "dev"){
-          event.reply([
-            {
-              type: 'template',
-              altText: 'dev',
-              template: {
-                type: 'buttons',
-                title: '恭喜你!!',
-                text: '打開了神祕小選單，請問您要?',
-                actions: [{
-                  type: 'message',
-                  label: '作弊',
-                  text: 'SystemCall.Cheat'
-                }, {
-                  type: 'message',
-                  label: '忘了一切',
-                  text: 'SystemCall.Reset'
-                }]
-              }
-            }
-          ]).then(function (data) {
-            console.log('Success', data);
-          }).catch(function (error) {
-            console.log('Error', error);
-          });
-        }
-        if(event.message.text == "SystemCall.Cheat"){
-          user.terms = true;
-          user.phoneValidate = true;
-          event.reply([
-            { type: 'text', text: "你作弊!!(通過條款、電話驗證)" }
-          ]).then(function (data) {
-            console.log('Success', data);
-          }).catch(function (error) {
-            console.log('Error', error);
-          });
-        }
-        if(event.message.text == "SystemCall.Reset"){
-          user = {
-            id:event.source.userId,
-            displayName:profile.displayName,
-            terms:false,
-            phoneValidate:false,
-            recipient:null,
-            recipientDate:null,
-            senderDate:null,
-            senderDateDesign:null,
-            propType:null
-          }
-          userList.splice(userList.findIndex(e => e.id === profile.userId), 1);
-          // 加入歷史資料集中
-          userList = userList.concat([{
-            user:user
-          }]);
-          /*
-          user.terms=false;
-          user.phoneValidate=false;
-          user.recipient=null;
-          user.recipientDate=null;
-          user.senderDate=null;
-          user.senderDateDesign=null;
-          user.propType=null;
-          */
-
-          event.reply([
-            { type: 'text', text: "什麼都忘了...!!(狀態已重置)" }
-          ]).then(function (data) {
-            console.log('Success', data);
-          }).catch(function (error) {
-            console.log('Error', error);
-          });
-        }
-        ////////////////////////////////////////////dev//////////////////////////////
         
 
         console.dir("///////////////debug reply/////////");
@@ -615,7 +609,7 @@ bot.on('postback', function (event) {
             recipient:null,
             recipientDate:null,
             senderDate:null,
-            senderDateDesign:null,
+            senderDateAssign:null,
             propType:null
           }
           userList = userList.concat([{
@@ -625,56 +619,27 @@ bot.on('postback', function (event) {
 
         // 判斷是寄件日期還是收件日期
         if(event.postback.data == "recipientDate"){
-          user.recipientDate = event.postback.params.date;
           event.reply([
             {type: 'text', text: "寄件日期:" + event.postback.params.date}
           ]).then(function (data) {
+            user.recipientDate = event.postback.params.date;
             console.log('Success', data);
           }).catch(function (error) {
             console.log('Error', error);
           });
         }
         else if(event.postback.data == "senderDate"){
-          user.senderDate = event.postback.params.date;
           event.reply([
             {type: 'text', text: "到達日期:" + event.postback.params.date}
           ]).then(function (data) {
+            user.senderDate = event.postback.params.date;
             console.log('Success', data);
           }).catch(function (error) {
             console.log('Error', error);
           });
         }
 
-        if(user.senderDate != null && user.recipientDate != null){
-          event.reply([
-            {
-              type: 'template',
-              altText: '配達時段',
-              template: {
-                type: 'buttons',
-                title: '請選擇配達時段',
-                text: '選擇配達',
-                actions: [{
-                  type: 'message',
-                  label: '不指定',
-                  text: '不指定'
-                }, {
-                  type: 'message',
-                  label: '13時以前',
-                  text: '13時以前'
-                }, {
-                  type: 'message',
-                  label: '14-18時',
-                  text: '14-18時'
-                }]
-              }
-            }
-          ]).then(function (data) {
-            console.log('Success', data);
-          }).catch(function (error) {
-            console.log('Error', error);
-          });
-        }
+
         
         /*
         event.reply([
