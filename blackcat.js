@@ -92,103 +92,6 @@ bot.on('message', function (event) {
   event.source.profile().then(function (profile) {
     if(event.source.type == 'user'){
 
-      ////////////////////////////////////////////dev//////////////////////////////
-      if(event.message.text == "dev"){
-        event.reply([
-          {
-            type: 'template',
-            altText: 'dev',
-            template: {
-              type: 'buttons',
-              title: '恭喜你!!',
-              text: '打開了神祕小選單，請問您要?',
-              actions: [{
-                type: 'message',
-                label: '小作弊(同意條款、電話驗證)',
-                text: 'SystemCall.Cheat'
-              },{
-                type: 'message',
-                label: '大作弊(小作弊、收寄件日期))',
-                text: 'SystemCall.CheatAll'
-              }, {
-                type: 'message',
-                label: '忘了一切(重置)',
-                text: 'SystemCall.Reset'
-              }]
-            }
-          }
-        ]).then(function (data) {
-          console.log('Success', data);
-        }).catch(function (error) {
-          console.log('Error', error);
-        });
-      }
-      if(event.message.text == "SystemCall.Cheat"){
-        event.reply([
-          { type: 'text', text: "你作弊!!(通過條款、電話驗證)" }
-        ]).then(function (data) {
-          user.terms = true;
-          user.phoneValidate = true;
-          console.log('Success', data);
-        }).catch(function (error) {
-          console.log('Error', error);
-        });
-      }
-      if(event.message.text == "SystemCall.CheatAll"){
-        event.reply([
-          { type: 'text', text: "你作弊!!(通過條款、電話驗證)" }
-        ]).then(function (data) {
-          user.terms = true;
-          user.phoneValidate = true;
-          user.recipientDate = '2020-01-07';
-          user.senderDate = '2020-01-07';
-          console.log('Success', data);
-        }).catch(function (error) {
-          console.log('Error', error);
-        });
-      }
-      if(event.message.text == "SystemCall.Reset"){
-        user = {
-          id:event.source.userId,
-          displayName:profile.displayName,
-          terms:false,
-          phoneValidate:false,
-          recipient:null,
-          recipientDate:null,
-          senderDate:null,
-          senderDateAssign:null,
-          propType:null
-        }
-        userList.splice(userList.findIndex(e => e.id === profile.userId), 1);
-        // 加入歷史資料集中
-        userList = userList.concat([{
-          user:user
-        }]);
-        /*
-        user.terms=false;
-        user.phoneValidate=false;
-        user.recipient=null;
-        user.recipientDate=null;
-        user.senderDate=null;
-        user.senderDateAssign=null;
-        user.propType=null;
-        */
-
-        event.reply([
-          { type: 'text', text: "什麼都忘了...!!(狀態已重置)" }
-        ]).then(function (data) {
-          console.log('Success', data);
-        }).catch(function (error) {
-          console.log('Error', error);
-        });
-      }
-      ////////////////////////////////////////////dev//////////////////////////////
-
-
-
-
-
-
       console.log("user");
       var validate = new Promise( (resolve, reject) => {
         var current = userList.filter(function(item, index, array){
@@ -231,20 +134,116 @@ bot.on('message', function (event) {
           console.log("有同名的使用者!!請聯繫開發者!");
         }
 
+
+        ////////////////////////////////////////////dev//////////////////////////////
+        if(event.message.text == "dev"){
+          event.reply([
+            {
+              type: 'template',
+              altText: 'dev',
+              template: {
+                type: 'buttons',
+                title: '恭喜你!!',
+                text: '打開了神祕小選單，請問您要?',
+                actions: [{
+                  type: 'message',
+                  label: '小作弊(同意條款、電話驗證)',
+                  text: 'SystemCall.Cheat'
+                },{
+                  type: 'message',
+                  label: '大作弊(小作弊、收寄件日期))',
+                  text: 'SystemCall.CheatAll'
+                }, {
+                  type: 'message',
+                  label: '忘了一切(重置)',
+                  text: 'SystemCall.Reset'
+                }]
+              }
+            }
+          ]).then(function (data) {
+            console.log('Success dev', data);
+          }).catch(function (error) {
+            console.log('Error', error);
+          });
+        }
+        else if(event.message.text == "SystemCall.Cheat"){
+          event.reply([
+            { type: 'text', text: "你作弊!!(通過條款、電話驗證)" }
+          ]).then(function (data) {
+            user.terms = true;
+            user.phoneValidate = true;
+            console.log('Success SystemCall.Cheat', data);
+          }).catch(function (error) {
+            console.log('Error', error);
+          });
+        }
+        else if(event.message.text == "SystemCall.CheatAll"){
+          event.reply([
+            { type: 'text', text: "你作弊!!(通過條款、電話驗證、寄件日收件日)" }
+          ]).then(function (data) {
+            user.terms = true;
+            user.phoneValidate = true;
+            user.recipientDate = '2020-01-07';
+            user.senderDate = '2020-01-07';
+            console.log('Success SystemCall.CheatAll', data);
+          }).catch(function (error) {
+            console.log('Error', error);
+          });
+        }
+        else if(event.message.text == "SystemCall.Reset"){
+          user = {
+            id:event.source.userId,
+            displayName:profile.displayName,
+            terms:false,
+            phoneValidate:false,
+            recipient:null,
+            recipientDate:null,
+            senderDate:null,
+            senderDateAssign:null,
+            propType:null
+          }
+          userList.splice(userList.findIndex(e => e.id === profile.userId), 1);
+          // 加入歷史資料集中
+          userList = userList.concat([{
+            user:user
+          }]);
+          /*
+          user.terms=false;
+          user.phoneValidate=false;
+          user.recipient=null;
+          user.recipientDate=null;
+          user.senderDate=null;
+          user.senderDateAssign=null;
+          user.propType=null;
+          */
+
+          event.reply([
+            { type: 'text', text: "什麼都忘了...!!(狀態已重置)" }
+          ]).then(function (data) {
+            console.log('Success SystemCall.Reset', data);
+          }).catch(function (error) {
+            console.log('Error', error);
+          });
+        }
+        ////////////////////////////////////////////dev//////////////////////////////
+
+
+
+
         /** 預設條款 */
-        if(event.message.text == "我同意"){
+        else if(event.message.text == "我同意"){
           user.terms = true;
           event.reply([
             { type: 'text', text: "感謝您同意本公司的使用者條款以及隱私權聲明。" },
             { type: 'text', text: "歡迎使用黑貓! 請先輸入您的手機號碼完成認證。\n(例如：09XX XXX XXX)" }
           ]).then(function (data) {
-            console.log('Success', data);
+            console.log('Success 我同意', data);
           }).catch(function (error) {
             console.log('Error', error);
           });
         }
 
-        if(!user.terms && event.message.text != "我同意"){
+        else if(!user.terms && event.message.text != "我同意"){
           event.reply([
             { type: 'text', text: "黑貓宅急便 寄件超簡單，讓你輕鬆預約叫件，最終會給予QR Code,須自行至7-11,OK超商印出託運單" },
             {
@@ -274,7 +273,7 @@ bot.on('message', function (event) {
               }
             }
           ]).then(function (data) {
-            console.log('Success', data);
+            console.log('Success 預設', data);
           }).catch(function (error) {
             console.log('Error', error);
           });
@@ -340,19 +339,19 @@ bot.on('message', function (event) {
           }
 
           /** 手機驗證成功後才會進來 */
-          if(user.phoneValidate){
+          else if(user.phoneValidate){
 
             /** 已填寫寄件人、收件人地址 */
             if(user.senderDate != null && user.recipientDate != null){
 
               if( event.message.text == "不指定" || event.message.text == "13時以前" || event.message.text == "14-18時"){
-                user.senderDateAssign = event.message.text;
                 event.reply([
                   {
                     type: 'template',
                     altText: '請選擇物品內容',
                     template: {
-                      type: 'confirm',
+                      type: 'buttons',
+                      title: '請選擇物品內容',
                       text: '選擇內容',
                       actions: [{
                         type: 'message',
@@ -370,20 +369,23 @@ bot.on('message', function (event) {
                     }
                   }
                 ]).then(function (data) {
-                  console.log('Success', data);
+                  console.log('Success 物品內容', data);
+                  console.dir("event");
+                  console.dir(event);
+                  user.senderDateAssign = event.message.text;
                 }).catch(function (error) {
                   console.log('Error', error);
                 });
               }
-              if( event.message.text == "易碎物品" || event.message.text == "精密儀器" || event.message.text == "其他"){
-                user.propType = event.message.text;
+              else if( event.message.text == "易碎物品" || event.message.text == "精密儀器" || event.message.text == "其他"){
                 event.reply([
                   {
                     type: 'text',
                     text: "您好！請選擇內容類別\n1.其他\n2.文件\n3.家電3C\n4.水果\n5.麵粉"
                   }
                 ]).then(function (data) {
-                  console.log('Success', data);
+                  console.log('Success 內容類別', data);
+                  user.propType = event.message.text;
                 }).catch(function (error) {
                   console.log('Error', error);
                 });
@@ -492,7 +494,7 @@ bot.on('message', function (event) {
                   }
                 }
               ]).then(function (data) {
-                console.log('Success', data);
+                console.log('Success 日期畫面', data);
               }).catch(function (error) {
                 console.log('Error', error);
               });
@@ -623,7 +625,37 @@ bot.on('postback', function (event) {
             {type: 'text', text: "寄件日期:" + event.postback.params.date}
           ]).then(function (data) {
             user.recipientDate = event.postback.params.date;
-            console.log('Success', data);
+            console.log('Success 寄件日期', data);
+            if(user.senderDate != null && user.recipientDate != null){
+              bot.push(user.id, [
+                {
+                  type: 'template',
+                  altText: '配達時段',
+                  template: {
+                    type: 'buttons',
+                    title: '請選擇配達時段',
+                    text: '選擇配達',
+                    actions: [{
+                      type: 'message',
+                      label: '不指定',
+                      text: '不指定'
+                    }, {
+                      type: 'message',
+                      label: '13時以前',
+                      text: '13時以前'
+                    }, {
+                      type: 'message',
+                      label: '14-18時',
+                      text: '14-18時'
+                    }]
+                  }
+                }
+              ]).then(function (data) {
+                console.log('Success 配達時段1', data);
+              }).catch(function (error) {
+                console.log('Error', error);
+              });
+            }
           }).catch(function (error) {
             console.log('Error', error);
           });
@@ -633,7 +665,37 @@ bot.on('postback', function (event) {
             {type: 'text', text: "到達日期:" + event.postback.params.date}
           ]).then(function (data) {
             user.senderDate = event.postback.params.date;
-            console.log('Success', data);
+            console.log('Success 到達日期', data);
+            if(user.senderDate != null && user.recipientDate != null){
+              bot.push(user.id, [
+                {
+                  type: 'template',
+                  altText: '配達時段',
+                  template: {
+                    type: 'buttons',
+                    title: '請選擇配達時段',
+                    text: '選擇配達',
+                    actions: [{
+                      type: 'message',
+                      label: '不指定',
+                      text: '不指定'
+                    }, {
+                      type: 'message',
+                      label: '13時以前',
+                      text: '13時以前'
+                    }, {
+                      type: 'message',
+                      label: '14-18時',
+                      text: '14-18時'
+                    }]
+                  }
+                }
+              ]).then(function (data) {
+                console.log('Success 配達時段2', data);
+              }).catch(function (error) {
+                console.log('Error', error);
+              });
+            }
           }).catch(function (error) {
             console.log('Error', error);
           });
