@@ -2,6 +2,9 @@
   "name": "linebot_blackcat",
   "version": "1.0.0",
   "description": "linebot for blackcat",
+  "engines": {
+    "node": "10.10.0"
+  },
   "main": "blackcat.js",
   "dependencies": {
     "express": "^4.17.1",

@@ -3,9 +3,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const bot = linebot({
-	channelId: '1653588682',
-	channelSecret: '3a2b851c50bae56f27ff66c037c18505',
-	channelAccessToken: 'izJrvNE3Axr3OzFgsx3eqo1WLKZKeugeiH8GFt2iA36yceFjg4U6oMr6Pa6+/LMiGNiW1/Qalr7Psgy5jVHyGfye0OxCV3puxUhB+NXrZBRvSFi1u0qOck09qkKmFnw0uDR6Ut3N9SoEZmMmaPW7mAdB04t89/1O/w1cDnyilFU='
+	channelId: process.env.CHANNEL_ID || '1653588682',
+	channelSecret: process.env.CHANNEL_SECRET || '3a2b851c50bae56f27ff66c037c18505',
+	channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN || 'izJrvNE3Axr3OzFgsx3eqo1WLKZKeugeiH8GFt2iA36yceFjg4U6oMr6Pa6+/LMiGNiW1/Qalr7Psgy5jVHyGfye0OxCV3puxUhB+NXrZBRvSFi1u0qOck09qkKmFnw0uDR6Ut3N9SoEZmMmaPW7mAdB04t89/1O/w1cDnyilFU='
 });
 
 const app = express();
