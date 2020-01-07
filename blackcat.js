@@ -3,9 +3,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const bot = linebot({
-	channelId: process.env.CHANNEL_ID || '1653588682',
-	channelSecret: process.env.CHANNEL_SECRET || '3a2b851c50bae56f27ff66c037c18505',
-	channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN || 'izJrvNE3Axr3OzFgsx3eqo1WLKZKeugeiH8GFt2iA36yceFjg4U6oMr6Pa6+/LMiGNiW1/Qalr7Psgy5jVHyGfye0OxCV3puxUhB+NXrZBRvSFi1u0qOck09qkKmFnw0uDR6Ut3N9SoEZmMmaPW7mAdB04t89/1O/w1cDnyilFU='
+	channelId: process.env.CHANNEL_ID || '1653599208',
+	channelSecret: process.env.CHANNEL_SECRET || 'afaee0b417042750892ba943efc985a8',
+	channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN || '+lplVlN6npehzrRbjWBIuD1r+QqlTr4EALlmtTXz9MwLLmUAQlcVChTbhuu3hjleX4ieRa9RaAwLJJFkWJ+Kh7qMIUIpJUPRQXaKY5egkP91sFOtONucFSzUgAAqYUn8IVH4qDXaGEFggxMg9US/TwdB04t89/1O/w1cDnyilFU='
 });
 
 const app = express();
@@ -187,7 +187,7 @@ bot.on('message', function (event) {
         if(user.terms){
 
           /** 手機驗證區 */
-          if(event.message.text.match(/^09\d{8}$/) && !user.phoneValidate || event.message.text== "重新發送驗證碼" && !user.phoneValidate) {
+          if(event.message.text.replace(/\s*/g,"").match(/^09\d{8}$/) && !user.phoneValidate || event.message.text== "重新發送驗證碼" && !user.phoneValidate) {
             event.reply([
               {
                 type: 'template',
@@ -195,7 +195,7 @@ bot.on('message', function (event) {
                 template: {
                   type: 'buttons',
                   title: ' ',
-                  text: '我們已經透過手機簡訊，傳送認證碼至您的手機，請在此回傳認證碼已完成手機認證程序',
+                  text: '我們已經透過手機簡訊，傳送認證碼至您的手機，請在此回傳認證碼已完成手機認證程序(驗證碼:123456)',
                   actions: [{
                     type: 'message',
                     label: '重新輸入電話',
@@ -224,7 +224,7 @@ bot.on('message', function (event) {
                 altText: '設定-寄件人',
                 template: {
                   type: 'buttons',
-                  thumbnailImageUrl: 'https://example.com/bot/images/image.jpg',
+                  thumbnailImageUrl: 'https://i.imgur.com/43AiwZ0.jpg',
                   title: '設定-寄件人',
                   text: '請先完成 設定寄件人',
                   actions: [{
@@ -334,7 +334,7 @@ bot.on('message', function (event) {
                   altText: '寄件選單',
                   template: {
                     type: 'buttons',
-                    thumbnailImageUrl: 'https://example.com/bot/images/image.jpg',
+                    thumbnailImageUrl: 'https://i.imgur.com/v0gS4cH.jpg',
                     title: '選擇常用收件地址',
                     text: '請選擇常用收件地址',
                     actions: [{
@@ -377,7 +377,7 @@ bot.on('message', function (event) {
                   altText: '選擇日期畫面',
                   template: {
                     type: 'buttons',
-                    thumbnailImageUrl: 'https://example.com/bot/images/image.jpg',
+                    thumbnailImageUrl: 'https://i.imgur.com/wdwmaGe.jpg',
                     title: '選擇日期',
                     text: '請選擇寄件.到達日期',
                     actions: [{
@@ -437,7 +437,7 @@ bot.on('message', function (event) {
                 template: {
                   type: 'carousel',
                   columns: [{
-                    thumbnailImageUrl: 'https://example.com/bot/images/item1.jpg',
+                    thumbnailImageUrl: 'https://i.imgur.com/dOBVbjp.jpg',
                     title: '統智科技你好!',
                     text: '歡迎使用黑貓預約寄件服務，請選擇以下的服務',
                     actions: [{
@@ -454,21 +454,21 @@ bot.on('message', function (event) {
                       text: '設定'
                     }]
                   }, {
-                    thumbnailImageUrl: 'https://example.com/bot/images/item2.jpg',
+                    thumbnailImageUrl: 'https://i.imgur.com/378AknI.jpg',
                     title: '其他服務',
-                    text: '請選擇以下的服',
+                    text: '請選擇以下的服務',
                     actions: [{
                       type: 'message',
-                      label: '看不見',
-                      text: '看不見'
+                      label: '客服',
+                      text: '客服'
                     }, {
                       type: 'message',
-                      label: '看不見',
-                      text: '看不見'
+                      label: '常見問題',
+                      text: '常見問題'
                     }, {
                       type: 'message',
-                      label: '看不見',
-                      text: '看不見'
+                      label: '訂單',
+                      text: '訂單'
                     }]
                   }]
                 }
@@ -570,6 +570,8 @@ bot.on('message', function (event) {
         console.dir(userList);
         console.dir("user");
         console.dir(user);
+        console.dir("replace");
+        console.dir(event.message.text.replace(/\s*/g,""));
         console.dir("////////////////////////");
 
       }, reason => {
