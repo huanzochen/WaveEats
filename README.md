@@ -1,13 +1,13 @@
-##project_blackcat
+## project_blackcat
 
-##說明:
+# 說明:
 這個專案目前部署在Heroku上
 是一隻linebot
 
-##Require:
+## Require:
 nodejs 10.10.0
 
-##Debug
+## Debug
 
 查看log的方法:
 ```
@@ -18,7 +18,7 @@ heroku logs --tail -a -app_name
 // heroku logs --tail -a linebot-blackcat
 ```
 
-##ngrok (本地偵錯)
+## ngrok (本地偵錯)
 怎麼在本地偵錯?
 請參閱 https://ngrok.com/ 
 一個可以將流量導向到本地的服務
