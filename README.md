@@ -23,6 +23,5 @@ heroku logs --tail -a -app_name
 請參閱 https://ngrok.com/ 
 一個可以將流量導向到本地的服務
 LINEBOT流程圖:
-![image](picture or gif url)
-https://drive.google.com/file/d/1gZl1KMwTJ57Ckaiw31UAOI4oQt2M37rd/view?usp=sharing
+![image](https://github.com/huanzochen/projece_line_blackcat/blob/master/doc/ngrok%E6%B5%81%E7%A8%8B%E5%9C%96.png)
 
