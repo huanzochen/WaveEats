@@ -79,6 +79,16 @@ bot.on('follow', function (event) {
   })
 })
 
+/**
+ * user.status 列表
+ * newcomer 新訪客
+ * member 已註冊會員
+ * phonevalidating 正在接受電話驗證中...
+ * inputdirectly 直接輸入地址
+ * inputcommon 使用常用收件地址
+ * waitingforpackageconfirm 正在等待輸入品名
+ */
+
 bot.on('message', function (event) {
   event.source.profile().then(function (profile) {
     if (event.source.type === 'user') {
@@ -355,11 +365,11 @@ bot.on('message', function (event) {
               }
             ]).then(function (data) {
               console.log('Success 手機號碼輸入完成!', data)
-              user.status = 'phonevalidation'
+              user.status = 'phonevalidating'
             }).catch(function (error) {
               console.log('Error', error)
             })
-          } else if (event.message.text === '123456' && !user.phoneValidate && user.status === 'phonevalidation') {
+          } else if (event.message.text === '123456' && !user.phoneValidate && user.status === 'phonevalidating') {
             console.log('檢核-驗證碼程序')
             event.reply([
               { type: 'text', text: '認證完成' },
