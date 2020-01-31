@@ -44,7 +44,8 @@ bot.on('follow', function (event) {
             recipientDate: null,
             senderDate: null,
             senderDateAssign: null,
-            propType: null
+            propType: null,
+            category: null
           }
           userList = userList.concat([{
             user: user
@@ -104,7 +105,9 @@ bot.on('message', function (event) {
             recipientDate: null,
             senderDate: null,
             senderDateAssign: null,
-            propType: null
+            propType: null,
+            category: null,
+            status: null
           }
           // 加入歷史資料集中
           userList = userList.concat([{
@@ -120,7 +123,76 @@ bot.on('message', function (event) {
         }
 
         /// /////////////////////////////////////////dev//////////////////////////////
-        if (event.message.text === 'dev') {
+
+        if (event.message.text === 'test') {
+          event.reply([
+            {
+              type: 'flex',
+              altText: 'this is a flex message',
+              contents: {
+                type: 'bubble',
+                header: {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [
+                    {
+                      type: 'text',
+                      text: 'Header text'
+                    }
+                  ]
+                },
+                hero: {
+                  type: 'image',
+                  url: 'https://crazypetter.com.tw/wp-content/uploads/2019/07/BLOW-%E6%88%90%E9%95%B7%E5%8F%B2_190413_0911.jpg'
+                },
+                body: {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [
+                    {
+                      type: 'text',
+                      text: 'Body text'
+                    }
+                  ]
+                },
+                footer: {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [
+                    {
+                      type: 'text',
+                      text: 'Footer text'
+                    }
+                  ]
+                },
+                styles: {
+                  header: {
+                    backgroundColor: '#00ffff'
+                  },
+                  hero: {
+                    separator: true,
+                    separatorColor: '#000000'
+                  },
+                  footer: {
+                    backgroundColor: '#00ffff',
+                    separator: true,
+                    separatorColor: '#000000'
+                  }
+                }
+              }
+            }
+          ]).then(function (data) {
+            console.log('Success dev', data)
+          }).catch(function (error) {
+            console.log('Error', error)
+          })
+        }
+
+        else if (event.message.text === 'map') {
+
+        }
+
+        else if (event.message.text === 'dev') {
           event.reply([
             {
               type: 'template',
@@ -181,7 +253,9 @@ bot.on('message', function (event) {
             recipientDate: null,
             senderDate: null,
             senderDateAssign: null,
-            propType: null
+            propType: null,
+            category: null,
+            status: null
           }
           userList.splice(userList.findIndex(e => e.id === profile.userId), 1)
           // 加入歷史資料集中
@@ -311,6 +385,52 @@ bot.on('message', function (event) {
             /** 已填寫寄件時間、收件時間 */
             if (user.senderDate != null && user.recipientDate != null) {
               console.log('檢核-指定時間選擇')
+              /** 已填寫物品內容、內容類別 */
+              if (user.propType !== null && user.category !== null) {
+                if (user.status === 'watingforpackageconfirm' && event.message.text === '確認') {
+                  event.reply([
+                    {
+                      type: 'text',
+                      text: '寄件成功! 結束'
+                    }
+                  ]).then(function (data) {
+                    console.log('Success 寄件成功!', data)
+                  }).catch(function (error) {
+                    console.log('Error', error)
+                  })
+                } else if (user.status === 'watingforpackageconfirm') {
+                  console.log('檢核-拋送地址確認圖案')
+                  event.reply([
+                    {
+                      type: 'text',
+                      text: '產一個地址圖加確認'
+                    },
+                    {
+                      type: 'template',
+                      altText: '確認寄件?',
+                      template: {
+                        type: 'confirm',
+                        text: '確認寄件?',
+                        actions: [{
+                          type: 'message',
+                          label: '重新寄件',
+                          text: '重新寄件'
+                        }, {
+                          type: 'message',
+                          label: '確認',
+                          text: '確認'
+                        }]
+                      }
+                    }
+                  ]).then(function (data) {
+                    console.log('Success 拋送地址確認圖案', data)
+                    user.packagename = event.message.text
+                  }).catch(function (error) {
+                    console.log('Error', error)
+                  })
+                }
+              }
+
               if (event.message.text === '不指定' || event.message.text === '13時以前' || event.message.text === '14-18時') {
                 event.reply([
                   {
@@ -353,6 +473,36 @@ bot.on('message', function (event) {
                 ]).then(function (data) {
                   console.log('Success 內容類別選擇', data)
                   user.propType = event.message.text
+                }).catch(function (error) {
+                  console.log('Error', error)
+                })
+              } else if (event.message.text === '1' || event.message.text === '2' || event.message.text === '3' || event.message.text === '4' || event.message.text === '5') {
+                console.log('內容類別')
+                event.reply([
+                  {
+                    type: 'text',
+                    text: '您好！請輸入品名'
+                  }
+                ]).then(function (data) {
+                  switch (event.message.text) {
+                    case '1':
+                      user.category = '其他'
+                      break
+                    case '2':
+                      user.category = '文件'
+                      break
+                    case '3':
+                      user.category = '家電3C'
+                      break
+                    case '4':
+                      user.category = '水果'
+                      break
+                    case '5':
+                      user.category = '麵粉'
+                      break
+                  }
+                  user.status = 'watingforpackageconfirm'
+                  console.log('Success 品名輸入', data)
                 }).catch(function (error) {
                   console.log('Error', error)
                 })
@@ -563,9 +713,9 @@ bot.on('postback', function (event) {
       })
       validate.then(current => {
         if (Object.keys(current).length > 0) {
-          console.log('驗證使用者資料已存在_加入類')
+          console.log('驗證使用者資料已存在_回傳類')
         } else if (Object.keys(current).length === 0) {
-          console.log('驗證使用者資料不存在-加入新資料_加入類')
+          console.log('驗證使用者資料不存在-加入新資料_回傳類')
           user = {
             id: event.source.userId,
             displayName: profile.displayName,
