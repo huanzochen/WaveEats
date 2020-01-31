@@ -4,6 +4,7 @@ const linebot = require('linebot')
 
 /** 使用者 */
 var userList = []
+var user = []
 
 const bot = linebot({
   channelId: process.env.CHANNEL_ID || '1653599208',
@@ -40,13 +41,13 @@ bot.on('follow', function (event) {
             displayName: profile.displayName, // 使用者名稱
             terms: false, // 是否同意條款
             phoneValidate: false, // 是否同意電話驗證
-            recipient: null,  // 收件地址以及資訊
+            recipient: null, // 收件地址以及資訊
             recipientDate: null, // 收件日期
             senderDate: null, // 寄件日期
             senderDateAssign: null, // 指定到達時間
             propType: null, // 物品內容
             category: null, // 內容類別
-            status: null  // 當前狀態 (紀錄當前步驟用)
+            status: null // 當前狀態 (紀錄當前步驟用)
           }
           userList = userList.concat([{
             user: user
@@ -102,13 +103,13 @@ bot.on('message', function (event) {
             displayName: profile.displayName, // 使用者名稱
             terms: false, // 是否同意條款
             phoneValidate: false, // 是否同意電話驗證
-            recipient: null,  // 收件地址以及資訊
+            recipient: null, // 收件地址以及資訊
             recipientDate: null, // 收件日期
             senderDate: null, // 寄件日期
             senderDateAssign: null, // 指定到達時間
             propType: null, // 物品內容
             category: null, // 內容類別
-            status: null  // 當前狀態 (紀錄當前步驟用)
+            status: null // 當前狀態 (紀錄當前步驟用)
           }
           // 加入歷史資料集中
           userList = userList.concat([{
@@ -194,13 +195,9 @@ bot.on('message', function (event) {
           }).catch(function (error) {
             console.log('Error', error)
           })
-        }
+        } else if (event.message.text === 'map') {
 
-        else if (event.message.text === 'map') {
-
-        }
-
-        else if (event.message.text === 'dev') {
+        } else if (event.message.text === 'dev') {
           event.reply([
             {
               type: 'template',
@@ -257,13 +254,13 @@ bot.on('message', function (event) {
             displayName: profile.displayName, // 使用者名稱
             terms: false, // 是否同意條款
             phoneValidate: false, // 是否同意電話驗證
-            recipient: null,  // 收件地址以及資訊
+            recipient: null, // 收件地址以及資訊
             recipientDate: null, // 收件日期
             senderDate: null, // 寄件日期
             senderDateAssign: null, // 指定到達時間
             propType: null, // 物品內容
             category: null, // 內容類別
-            status: null  // 當前狀態 (紀錄當前步驟用)
+            status: null // 當前狀態 (紀錄當前步驟用)
           }
           userList.splice(userList.findIndex(e => e.id === profile.userId), 1)
           // 加入歷史資料集中
@@ -618,8 +615,7 @@ bot.on('message', function (event) {
               }).catch(function (error) {
                 console.log('Error', error)
               })
-            }
-            else if (event.message.text === '常用收件地址') {
+            } else if (event.message.text === '常用收件地址') {
               event.reply({
                 type: 'template',
                 altText: '用戶選單',
@@ -629,23 +625,23 @@ bot.on('message', function (event) {
                   title: '設定-常用收件地址!',
                   text: '請選擇常用收件地址',
                   actions: [
-                  {
-                    type: 'message',
-                    label: '臺北市信義區忠孝東路5段1之8號12樓',
-                    text: '臺北市信義區忠孝東路5段1之8號12樓'
-                  }, {
-                    type: 'message',
-                    label: '嘉義縣太保市故宮大道888號',
-                    text: '嘉義縣太保市故宮大道888號'
-                  }, {
-                    type: 'message',
-                    label: '屏東縣恆春鎮燈塔路90號',
-                    text: '屏東縣恆春鎮燈塔路90號'
-                  }, {
-                    type: 'message',
-                    label: '花蓮縣花蓮市中山路50號',
-                    text: '花蓮縣花蓮市中山路50號'
-                  }]
+                    {
+                      type: 'message',
+                      label: '臺北市信義區忠孝東路5段1之8號12樓',
+                      text: '臺北市信義區忠孝東路5段1之8號12樓'
+                    }, {
+                      type: 'message',
+                      label: '嘉義縣太保市故宮大道888號',
+                      text: '嘉義縣太保市故宮大道888號'
+                    }, {
+                      type: 'message',
+                      label: '屏東縣恆春鎮燈塔路90號',
+                      text: '屏東縣恆春鎮燈塔路90號'
+                    }, {
+                      type: 'message',
+                      label: '花蓮縣花蓮市中山路50號',
+                      text: '花蓮縣花蓮市中山路50號'
+                    }]
                 }
               }).then(function (data) {
                 user.status = 'inputcommon' // 使用常用收件地址
@@ -653,8 +649,7 @@ bot.on('message', function (event) {
               }).catch(function (error) {
                 console.log('Error', error)
               })
-            } 
-            else if (user.status === 'member') {
+            } else if (user.status === 'member') {
               console.log('檢核-常規用戶選單')
               // 常規用戶選單
               event.reply({
@@ -769,13 +764,13 @@ bot.on('postback', function (event) {
             displayName: profile.displayName, // 使用者名稱
             terms: false, // 是否同意條款
             phoneValidate: false, // 是否同意電話驗證
-            recipient: null,  // 收件地址以及資訊
+            recipient: null, // 收件地址以及資訊
             recipientDate: null, // 收件日期
             senderDate: null, // 寄件日期
             senderDateAssign: null, // 指定到達時間
             propType: null, // 物品內容
             category: null, // 內容類別
-            status: null  // 當前狀態 (紀錄當前步驟用)
+            status: null // 當前狀態 (紀錄當前步驟用)
           }
           userList = userList.concat([{
             user: user

@@ -22,7 +22,7 @@
   },
   "scripts": {
     "start": "node blackcat.js",
-    "test": "test",
+    "test": "npx eslint routes/bot.js --fix",
     "dev": "node nodemon blackcat.js"
   },
   "keywords": [
