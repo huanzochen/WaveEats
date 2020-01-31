@@ -36,16 +36,17 @@ bot.on('follow', function (event) {
         } else if (Object.keys(current).length === 0) {
           console.log('驗證使用者資料不存在-加入新資料_加入類')
           user = {
-            id: event.source.userId,
-            displayName: profile.displayName,
-            terms: false,
-            phoneValidate: false,
-            recipient: null,
-            recipientDate: null,
-            senderDate: null,
-            senderDateAssign: null,
-            propType: null,
-            category: null
+            id: event.source.userId, // 使用者ID
+            displayName: profile.displayName, // 使用者名稱
+            terms: false, // 是否同意條款
+            phoneValidate: false, // 是否同意電話驗證
+            recipient: null,  // 收件地址以及資訊
+            recipientDate: null, // 收件日期
+            senderDate: null, // 寄件日期
+            senderDateAssign: null, // 指定到達時間
+            propType: null, // 物品內容
+            category: null, // 內容類別
+            status: null  // 當前狀態 (紀錄當前步驟用)
           }
           userList = userList.concat([{
             user: user
@@ -97,17 +98,17 @@ bot.on('message', function (event) {
         } else if (Object.keys(current).length === 0) {
           console.log('驗證使用者資料不存在-加入新資料_聊天類')
           user = {
-            id: event.source.userId,
-            displayName: profile.displayName,
-            terms: false,
-            phoneValidate: false,
-            recipient: null,
-            recipientDate: null,
-            senderDate: null,
-            senderDateAssign: null,
-            propType: null,
-            category: null,
-            status: null
+            id: event.source.userId, // 使用者ID
+            displayName: profile.displayName, // 使用者名稱
+            terms: false, // 是否同意條款
+            phoneValidate: false, // 是否同意電話驗證
+            recipient: null,  // 收件地址以及資訊
+            recipientDate: null, // 收件日期
+            senderDate: null, // 寄件日期
+            senderDateAssign: null, // 指定到達時間
+            propType: null, // 物品內容
+            category: null, // 內容類別
+            status: null  // 當前狀態 (紀錄當前步驟用)
           }
           // 加入歷史資料集中
           userList = userList.concat([{
@@ -120,6 +121,13 @@ bot.on('message', function (event) {
           console.log(current)
         } else if (Object.keys(current).length > 1) {
           console.log('有同名的使用者!!請聯繫開發者!')
+        }
+
+        // 檢核是否為已註冊會員
+        if (user.status === null) {
+          if (user.terms && user.phoneValidate) {
+            user.status = 'member'
+          }
         }
 
         /// /////////////////////////////////////////dev//////////////////////////////
@@ -245,17 +253,17 @@ bot.on('message', function (event) {
           })
         } else if (event.message.text === 'SystemCall.Reset') {
           user = {
-            id: event.source.userId,
-            displayName: profile.displayName,
-            terms: false,
-            phoneValidate: false,
-            recipient: null,
-            recipientDate: null,
-            senderDate: null,
-            senderDateAssign: null,
-            propType: null,
-            category: null,
-            status: null
+            id: event.source.userId, // 使用者ID
+            displayName: profile.displayName, // 使用者名稱
+            terms: false, // 是否同意條款
+            phoneValidate: false, // 是否同意電話驗證
+            recipient: null,  // 收件地址以及資訊
+            recipientDate: null, // 收件日期
+            senderDate: null, // 寄件日期
+            senderDateAssign: null, // 指定到達時間
+            propType: null, // 物品內容
+            category: null, // 內容類別
+            status: null  // 當前狀態 (紀錄當前步驟用)
           }
           userList.splice(userList.findIndex(e => e.id === profile.userId), 1)
           // 加入歷史資料集中
@@ -274,7 +282,7 @@ bot.on('message', function (event) {
         /// /////////////////////////////////////////dev//////////////////////////////
 
         /** 預設條款 */
-        else if (event.message.text === '我同意') {
+        else if (event.message.text === '我同意' && user.status === 'newcomer') {
           event.reply([
             { type: 'text', text: '感謝您同意本公司的使用者條款以及隱私權聲明。' },
             { type: 'text', text: '歡迎使用黑貓! 請先輸入您的手機號碼完成認證。\n(例如：09XX XXX XXX)' }
@@ -314,6 +322,7 @@ bot.on('message', function (event) {
               }
             }
           ]).then(function (data) {
+            user.status = 'newcomer'
             console.log('Success 預設', data)
           }).catch(function (error) {
             console.log('Error', error)
@@ -349,10 +358,11 @@ bot.on('message', function (event) {
               }
             ]).then(function (data) {
               console.log('Success 手機號碼輸入完成!', data)
+              user.status = 'phonevalidation'
             }).catch(function (error) {
               console.log('Error', error)
             })
-          } else if (event.message.text === '123456' && !user.phoneValidate) {
+          } else if (event.message.text === '123456' && !user.phoneValidate && user.status === 'phonevalidation') {
             console.log('檢核-驗證碼程序')
             event.reply([
               { type: 'text', text: '認證完成' },
@@ -394,6 +404,7 @@ bot.on('message', function (event) {
                       text: '寄件成功! 結束'
                     }
                   ]).then(function (data) {
+                    user.status = 'member'
                     console.log('Success 寄件成功!', data)
                   }).catch(function (error) {
                     console.log('Error', error)
@@ -539,7 +550,7 @@ bot.on('message', function (event) {
               }).catch(function (error) {
                 console.log('Error', error)
               })
-            } else if (event.message.text === '寄件') {
+            } else if (event.message.text === '寄件' || event.message.text === '常用地址寄件') {
               event.reply([
                 {
                   type: 'template',
@@ -555,8 +566,8 @@ bot.on('message', function (event) {
                       text: '常用收件地址'
                     }, {
                       type: 'message',
-                      label: '設定常用收件地址',
-                      text: '設定常用收件地址'
+                      label: '設定常用地址',
+                      text: '設定常用地址'
                     }, {
                       type: 'message',
                       label: '直接輸入',
@@ -573,11 +584,12 @@ bot.on('message', function (event) {
               event.reply([
                 { type: 'text', text: '您好！請輸入收件地址以及資訊。\n例如：李曉明/09XX XXX XXX/台北市XX區XXX路XX號XX樓' }
               ]).then(function (data) {
+                user.status = 'inputdirectly' // 直接輸入地址
                 console.log('Success 直接輸入地址', data)
               }).catch(function (error) {
                 console.log('Error', error)
               })
-            } else if (event.message.text.match(/[\u4e00-\u9fa5]{1,15}\/09\d{8}\/[\u4e00-\u9fa5]{1,500}/)) {
+            } else if ((event.message.text.match(/[\u4e00-\u9fa5]{1,15}\/09\d{8}\/[\u4e00-\u9fa5]{1,500}/) && user.status === 'inputdirectly') || (event.message.text.match(/[\u4e00-\u9fa5]{1,500}/) && user.status === 'inputcommon')) {
               user.recipient = event.message.text
               event.reply([
                 {
@@ -602,11 +614,47 @@ bot.on('message', function (event) {
                   }
                 }
               ]).then(function (data) {
-                console.log('Success 日期畫面', data)
+                console.log('Success 日期選擇畫面', data)
               }).catch(function (error) {
                 console.log('Error', error)
               })
-            } else {
+            }
+            else if (event.message.text === '常用收件地址') {
+              event.reply({
+                type: 'template',
+                altText: '用戶選單',
+                template: {
+                  type: 'buttons',
+                  thumbnailImageUrl: 'https://i.imgur.com/v0gS4cH.jpg',
+                  title: '設定-常用收件地址!',
+                  text: '請選擇常用收件地址',
+                  actions: [
+                  {
+                    type: 'message',
+                    label: '臺北市信義區忠孝東路5段1之8號12樓',
+                    text: '臺北市信義區忠孝東路5段1之8號12樓'
+                  }, {
+                    type: 'message',
+                    label: '嘉義縣太保市故宮大道888號',
+                    text: '嘉義縣太保市故宮大道888號'
+                  }, {
+                    type: 'message',
+                    label: '屏東縣恆春鎮燈塔路90號',
+                    text: '屏東縣恆春鎮燈塔路90號'
+                  }, {
+                    type: 'message',
+                    label: '花蓮縣花蓮市中山路50號',
+                    text: '花蓮縣花蓮市中山路50號'
+                  }]
+                }
+              }).then(function (data) {
+                user.status = 'inputcommon' // 使用常用收件地址
+                console.log('Success 顯示常用收件地址選單', data)
+              }).catch(function (error) {
+                console.log('Error', error)
+              })
+            } 
+            else if (user.status === 'member') {
               console.log('檢核-常規用戶選單')
               // 常規用戶選單
               event.reply({
@@ -717,15 +765,17 @@ bot.on('postback', function (event) {
         } else if (Object.keys(current).length === 0) {
           console.log('驗證使用者資料不存在-加入新資料_回傳類')
           user = {
-            id: event.source.userId,
-            displayName: profile.displayName,
-            terms: false,
-            phoneValidate: false,
-            recipient: null,
-            recipientDate: null,
-            senderDate: null,
-            senderDateAssign: null,
-            propType: null
+            id: event.source.userId, // 使用者ID
+            displayName: profile.displayName, // 使用者名稱
+            terms: false, // 是否同意條款
+            phoneValidate: false, // 是否同意電話驗證
+            recipient: null,  // 收件地址以及資訊
+            recipientDate: null, // 收件日期
+            senderDate: null, // 寄件日期
+            senderDateAssign: null, // 指定到達時間
+            propType: null, // 物品內容
+            category: null, // 內容類別
+            status: null  // 當前狀態 (紀錄當前步驟用)
           }
           userList = userList.concat([{
             user: user
