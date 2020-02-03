@@ -1,0 +1,32 @@
+body,h1,div,nav,label {
+    font-family: Microsoft JhengHei;
+}
+
+
+div.setting {
+    width: 90%;
+    margin: 1em auto;
+    padding: 1em;
+    background-color: #FFFFFF;
+    border-radius: 0.5em;
+}
+
+.green {
+    background-color: #18755B;
+}
+
+.green-text {
+    color: #3E8C77;
+    font-weight:bold;
+}
+
+a:link, a:visited {
+    color: #13c277;
+    text-decoration: none;
+}
+@media (max-width: 700px) {
+    div {
+        margin: 0 auto;
+        width: auto;
+    }
+}

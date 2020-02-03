@@ -390,6 +390,7 @@ bot.on('message', function (event) {
               }
             ]).then(function (data) {
               user.phoneValidate = true
+              user.status = 'member'
               console.log('Success 手機號碼驗證成功!', data)
             }).catch(function (error) {
               console.log('Error', error)
