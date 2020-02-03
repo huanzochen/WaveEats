@@ -1,3 +1,4 @@
+require('dotenv').config()
 var express = require('express')
 var router = express.Router()
 const linebot = require('linebot')
@@ -198,6 +199,28 @@ bot.on('message', function (event) {
                     separatorColor: '#000000'
                   }
                 }
+              }
+            }
+          ]).then(function (data) {
+            console.log('Success dev', data)
+          }).catch(function (error) {
+            console.log('Error', error)
+          })
+        } else if (event.message.text === 'test2') {
+          event.reply([
+            {
+              type: 'template',
+              altText: 'dev',
+              template: {
+                type: 'buttons',
+                title: '恭喜你!!',
+                text: '打開了神祕小選單，請問您要?',
+                actions: [{
+                  "type": "postback",
+                  "label": "Buy",
+                  "data": "action=buy&itemid=111",
+                  "text": "Buy"
+                }]
               }
             }
           ]).then(function (data) {
