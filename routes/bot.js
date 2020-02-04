@@ -622,14 +622,6 @@ bot.on('message', function (event) {
                       label: '常用收件地址',
                       text: '常用收件地址'
                     }, {
-                      type: 'uri',
-                      label: '常用收件地址2',
-                      uri: 'line://app/1653821039-n0YBYazr'
-                    }, {
-                      type: 'message',
-                      label: '設定常用地址',
-                      text: '設定常用地址'
-                    }, {
                       type: 'message',
                       label: '直接輸入',
                       text: '直接輸入'
