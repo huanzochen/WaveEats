@@ -85,8 +85,7 @@ bot.on('follow', function (event) {
  * newcomer 新訪客
  * member 已註冊會員
  * phonevalidating 正在接受電話驗證中...
- * inputdirectly 直接輸入地址
- * inputcommon 使用常用收件地址
+ * inputaddress 輸入地址中
  * waitingforpackageconfirm 正在等待輸入品名
  */
 
@@ -637,12 +636,12 @@ bot.on('message', function (event) {
               event.reply([
                 { type: 'text', text: '您好！請輸入收件地址以及資訊。\n例如：李曉明/09XX XXX XXX/台北市XX區XXX路XX號XX樓' }
               ]).then(function (data) {
-                user.status = 'inputdirectly' // 直接輸入地址
+                user.status = 'inputaddress' // 直接輸入地址
                 console.log('Success 直接輸入地址', data)
               }).catch(function (error) {
                 console.log('Error', error)
               })
-            } else if ((event.message.text.match(/[\u4e00-\u9fa5]{1,15}\/09\d{8}\/[\u4e00-\u9fa5]{7,500}/) && user.status === 'inputdirectly') || (event.message.text.match(/[\u4e00-\u9fa5]{7,500}/) && user.status === 'inputcommon')) {
+            } else if ((event.message.text.match(/[\u4e00-\u9fa5]{1,15}\/09\d{8}\/[\u4e00-\u9fa5]{7,500}/) && user.status === 'inputaddress') || (event.message.text.match(/[\u4e00-\u9fa5]{7,500}/) && user.status === 'inputaddress')) {
               user.recipient = event.message.text
               event.reply([
                 {
@@ -700,7 +699,7 @@ bot.on('message', function (event) {
                     }]
                 }
               }).then(function (data) {
-                user.status = 'inputcommon' // 使用常用收件地址
+                user.status = 'inputaddress' // 使用常用收件地址
                 console.log('Success 顯示常用收件地址選單', data)
               }).catch(function (error) {
                 console.log('Error', error)
