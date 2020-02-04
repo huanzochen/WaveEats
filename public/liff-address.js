@@ -94,9 +94,9 @@ function registerButtonHandlers () {
         console.log('ya')
         liff.sendMessages([{
           type: 'text',
-          text: "我要講話囉!You've successfully sent a message! Hooray!"
+          text: document.getElementById('addressSelect').options[document.getElementById('addressSelect').selectedIndex].text
         }]).then(function () {
-          window.alert('Message sent')
+          liff.closeWindow()
         }).catch(function (error) {
           window.alert('Error sending message: ' + error)
         })

@@ -213,7 +213,7 @@ bot.on('message', function (event) {
               altText: 'dev',
               template: {
                 type: 'buttons',
-                title: '恭喜你!!',
+                title: 'dev',
                 text: '打開了神祕小選單，請問您要?',
                 actions: [{
                   "type": "postback",
@@ -230,27 +230,27 @@ bot.on('message', function (event) {
           })
         } else if (event.message.text === 'map') {
 
-        } else if (event.message.text === 'dev') {
+        } else if (event.message.text === 'dev' || event.message.text === '訂單') {
           event.reply([
             {
               type: 'template',
               altText: 'dev',
               template: {
                 type: 'buttons',
-                title: '恭喜你!!',
+                title: 'dev',
                 text: '打開了神祕小選單，請問您要?',
                 actions: [{
                   type: 'message',
-                  label: '小作弊(同意條款、電話驗證)',
-                  text: 'SystemCall.Cheat'
+                  label: '條款+電話(完成註冊流程)',
+                  text: 'be_member'
                 }, {
                   type: 'message',
-                  label: '大作弊(小作弊、收寄件日期))',
-                  text: 'SystemCall.CheatAll'
+                  label: 'done_all',
+                  text: 'be_done'
                 }, {
                   type: 'message',
                   label: '忘了一切(重置)',
-                  text: 'SystemCall.Reset'
+                  text: 'get_reset'
                 }]
               }
             }
@@ -259,29 +259,47 @@ bot.on('message', function (event) {
           }).catch(function (error) {
             console.log('Error', error)
           })
-        } else if (event.message.text === 'SystemCall.Cheat') {
+        } else if (event.message.text === 'be_member') {
           event.reply([
-            { type: 'text', text: '你作弊!!(通過條款、電話驗證)' }
+            { type: 'text', text: '通過條款、電話驗證(完成註冊流程)' }
           ]).then(function (data) {
+            user = {
+              id: event.source.userId, // 使用者ID
+              displayName: profile.displayName, // 使用者名稱
+              terms: false, // 是否同意條款
+              phoneValidate: false, // 是否同意電話驗證
+              recipient: null, // 收件地址以及資訊
+              recipientDate: null, // 收件日期
+              senderDate: null, // 寄件日期
+              senderDateAssign: null, // 指定到達時間
+              propType: null, // 物品內容
+              category: null, // 內容類別
+              status: null // 當前狀態 (紀錄當前步驟用)
+            }
+            userList.splice(userList.findIndex(e => e.id === profile.userId), 1)
+            // 加入歷史資料集中
+            userList = userList.concat([{
+              user: user
+            }])
             user.terms = true
             user.phoneValidate = true
-            console.log('Success SystemCall.Cheat', data)
+            console.log('Success be_member', data)
           }).catch(function (error) {
             console.log('Error', error)
           })
-        } else if (event.message.text === 'SystemCall.CheatAll') {
+        } else if (event.message.text === 'be_done') {
           event.reply([
-            { type: 'text', text: '你作弊!!(通過條款、電話驗證、寄件日收件日)' }
+            { type: 'text', text: '完成寄件流程' }
           ]).then(function (data) {
             user.terms = true
             user.phoneValidate = true
             user.recipientDate = '2020-01-07'
             user.senderDate = '2020-01-07'
-            console.log('Success SystemCall.CheatAll', data)
+            console.log('Success be_done', data)
           }).catch(function (error) {
             console.log('Error', error)
           })
-        } else if (event.message.text === 'SystemCall.Reset') {
+        } else if (event.message.text === 'get_reset') {
           user = {
             id: event.source.userId, // 使用者ID
             displayName: profile.displayName, // 使用者名稱
@@ -302,9 +320,9 @@ bot.on('message', function (event) {
           }])
 
           event.reply([
-            { type: 'text', text: '什麼都忘了...!!(狀態已重置)' }
+            { type: 'text', text: '狀態已重置' }
           ]).then(function (data) {
-            console.log('Success SystemCall.Reset', data)
+            console.log('Success get_reset', data)
           }).catch(function (error) {
             console.log('Error', error)
           })
@@ -596,6 +614,10 @@ bot.on('message', function (event) {
                       label: '常用收件地址',
                       text: '常用收件地址'
                     }, {
+                      type: 'uri',
+                      label: '常用收件地址2',
+                      uri: 'line://app/1653821039-n0YBYazr'
+                    }, {
                       type: 'message',
                       label: '設定常用地址',
                       text: '設定常用地址'
@@ -608,6 +630,7 @@ bot.on('message', function (event) {
                 }
               ]).then(function (data) {
                 console.log('Success 顯示寄件選單', data)
+                user.status = 'inputcommon' // 使用常用收件地址
               }).catch(function (error) {
                 console.log('Error', error)
               })
@@ -620,7 +643,7 @@ bot.on('message', function (event) {
               }).catch(function (error) {
                 console.log('Error', error)
               })
-            } else if ((event.message.text.match(/[\u4e00-\u9fa5]{1,15}\/09\d{8}\/[\u4e00-\u9fa5]{1,500}/) && user.status === 'inputdirectly') || (event.message.text.match(/[\u4e00-\u9fa5]{1,500}/) && user.status === 'inputcommon')) {
+            } else if ((event.message.text.match(/[\u4e00-\u9fa5]{1,15}\/09\d{8}\/[\u4e00-\u9fa5]{7,500}/) && user.status === 'inputdirectly') || (event.message.text.match(/[\u4e00-\u9fa5]{7,500}/) && user.status === 'inputcommon')) {
               user.recipient = event.message.text
               event.reply([
                 {
@@ -672,9 +695,9 @@ bot.on('message', function (event) {
                       label: '屏東縣恆春鎮燈塔路90號',
                       text: '屏東縣恆春鎮燈塔路90號'
                     }, {
-                      type: 'message',
-                      label: '花蓮縣花蓮市中山路50號',
-                      text: '花蓮縣花蓮市中山路50號'
+                      type: 'uri',
+                      label: '更多',
+                      uri: 'line://app/1653821039-n0YBYazr'
                     }]
                 }
               }).then(function (data) {

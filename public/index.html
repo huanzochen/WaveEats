@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>LIFF Starter</title>
+        <title>黑貓宅急便</title>
         <script src="https://kit.fontawesome.com/edca5d8c83.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
         <link rel="stylesheet" href="/style.css" /> 
@@ -19,7 +19,7 @@
         <div class="setting">
             <div class="form-group">
                 <label for="address" class="green-text">請選擇常用地址</label>
-                <select class="form-control" id="exampleFormControlSelect1">
+                <select class="form-control" id="addressSelect">
                     <option>臺北市信義區忠孝東路5段1之8號12樓</option>
                     <option>嘉義縣太保市故宮大道888號</option>
                     <option>屏東縣恆春鎮燈塔路90號</option>
@@ -33,11 +33,23 @@
         </div>
     
 
-        <div id="liffAppContent">
+        <div id="liffAppContent" class="hidden">
             <!-- ACTION BUTTONS -->
             <div class="buttonGroup">
                 <div class="buttonRow">
                     <button id="closeWindowButton">Close LIFF App</button>
+                </div>
+            </div>
+            <!-- LOGIN LOGOUT BUTTONS -->
+            <div class="buttonGroup">
+                <button id="liffLoginButton">Log in</button>
+                <button id="liffLogoutButton">Log out</button>
+            </div>
+            <div id="statusMessage">
+                <div id="isInClientMessage"></div>
+                <div id="apiReferenceMessage">
+                    <p>Available LIFF methods vary depending on the browser you use to open the LIFF app.</p>
+                    <p>Please refer to the <a href="https://developers.line.biz/en/reference/liff/#initialize-liff-app">API reference page</a> for more information.</p>
                 </div>
             </div>
 

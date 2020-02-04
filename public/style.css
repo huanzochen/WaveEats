@@ -2,7 +2,6 @@ body,h1,div,nav,label {
     font-family: Microsoft JhengHei;
 }
 
-
 div.setting {
     width: 90%;
     margin: 1em auto;
@@ -23,6 +22,13 @@ div.setting {
 a:link, a:visited {
     color: #13c277;
     text-decoration: none;
+}
+.hidden {
+    display:none;
+}
+
+.h3.nav_title {
+    margin-bottom: 0em  !important; 
 }
 @media (max-width: 700px) {
     div {
