@@ -744,13 +744,13 @@ bot.on('message', function (event) {
                     title: '其他服務',
                     text: '請選擇以下的服務',
                     actions: [{
-                      type: 'message',
+                      type: 'uri',
                       label: '客服',
-                      text: '客服'
+                      uri: 'https://www.t-cat.com.tw/CallCenter/WebContact.aspx'
                     }, {
-                      type: 'message',
+                      type: 'uri',
                       label: '常見問題',
-                      text: '常見問題'
+                      uri: 'https://www.t-cat.com.tw/qa/services.aspx'
                     }, {
                       type: 'message',
                       label: '訂單',
