@@ -449,8 +449,9 @@ bot.on('message', function (event) {
                 if (user.status === 'watingforpackageconfirm' && event.message.text === '確認') {
                   event.reply([
                     {
-                      type: 'text',
-                      text: '寄件成功! 結束'
+                      type: 'image',
+                      originalContentUrl: 'https://i.imgur.com/CIfuFDd.png',
+                      previewImageUrl: 'https://i.imgur.com/CIfuFDd.png'
                     }
                   ]).then(function (data) {
                     user.status = 'member'
