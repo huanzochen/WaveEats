@@ -237,7 +237,7 @@ bot.on('message', function (event) {
               template: {
                 type: 'buttons',
                 title: 'dev',
-                text: '打開了神祕小選單，請問您要?',
+                text: '打開了dev小選單，請問您要?',
                 actions: [{
                   type: 'message',
                   label: '條款+電話(完成註冊流程)',
@@ -282,6 +282,7 @@ bot.on('message', function (event) {
             }])
             user.terms = true
             user.phoneValidate = true
+            user.status = 'member'
             console.log('Success be_member', data)
           }).catch(function (error) {
             console.log('Error', error)
