@@ -245,7 +245,7 @@ bot.on('message', function (event) {
                   text: 'be_member'
                 }, {
                   type: 'message',
-                  label: 'done_all',
+                  label: '完成寄件(產生寄件確認圖樣)',
                   text: 'be_done'
                 }, {
                   type: 'message',
@@ -259,9 +259,9 @@ bot.on('message', function (event) {
           }).catch(function (error) {
             console.log('Error', error)
           })
-        } else if (event.message.text === 'be_member') {
+        } else if (event.message.text === 'be_member' || event.message.text === '重新寄件') {
           event.reply([
-            { type: 'text', text: '通過條款、電話驗證(完成註冊流程)' }
+            { type: 'text', text: '通過條款、電話驗證(完成註冊流程) 輸入任意字元進入下一步' }
           ]).then(function (data) {
             user = {
               id: event.source.userId, // 使用者ID
@@ -289,12 +289,18 @@ bot.on('message', function (event) {
           })
         } else if (event.message.text === 'be_done') {
           event.reply([
-            { type: 'text', text: '完成寄件流程' }
+            { type: 'text', text: '完成寄件流程進入寄件確認畫面 輸入任意字元進入下一步 ' }
           ]).then(function (data) {
             user.terms = true
             user.phoneValidate = true
+            user.recipient = '臺北市信義區忠孝東路5段1之8號12樓'
             user.recipientDate = '2020-01-07'
             user.senderDate = '2020-01-07'
+            user.senderDateAssign = '不指定'
+            user.propType = '易碎物品'
+            user.category = '麵粉'
+            user.status = 'watingforpackageconfirm'
+            user.packagename = 'chxjx'
             console.log('Success be_done', data)
           }).catch(function (error) {
             console.log('Error', error)
@@ -463,8 +469,9 @@ bot.on('message', function (event) {
                   console.log('檢核-拋送地址確認圖案')
                   event.reply([
                     {
-                      type: 'text',
-                      text: '產一個地址圖加確認'
+                      type: 'image',
+                      originalContentUrl: 'https://i.imgur.com/uzWOVwr.png',
+                      previewImageUrl: 'https://i.imgur.com/uzWOVwr.png'
                     },
                     {
                       type: 'template',
@@ -763,7 +770,7 @@ bot.on('message', function (event) {
               { type: 'text', text: '感謝您同意本公司的使用者條款以及隱私權聲明。' },
               { type: 'text', text: '歡迎使用黑貓! 請先輸入您的手機號碼完成認證。\n(例如：09XX XXX XXX)' }
             ]).then(function (data) {
-              console.log('Success 同意條款完成', data)
+              console.log('Success 手機號碼驗證', data)
               user.terms = true
             }).catch(function (error) {
               console.log('Error', error)
