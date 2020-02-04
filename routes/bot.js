@@ -630,7 +630,6 @@ bot.on('message', function (event) {
                 }
               ]).then(function (data) {
                 console.log('Success 顯示寄件選單', data)
-                user.status = 'inputcommon' // 使用常用收件地址
               }).catch(function (error) {
                 console.log('Error', error)
               })
