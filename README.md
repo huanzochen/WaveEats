@@ -24,5 +24,5 @@ heroku logs --tail -a -app_name
 一個可以將流量導向到本地的服務
 只要在LINE Developer上將webhook改成ngrok提供的url即可本地偵錯(記得要使用https的連結)
 LINEBOT流程圖:
-![image](https://github.com/huanzochen/projece_line_blackcat/blob/master/doc/ngrok%E6%B5%81%E7%A8%8B%E5%9C%96.png)
+![image](https://https://github.com/huanzochen/project_line_blackcat/blob/master/doc/ngrok%E6%B5%81%E7%A8%8B%E5%9C%96_new.png)
 
