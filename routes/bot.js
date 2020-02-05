@@ -348,7 +348,7 @@ bot.on('message', function (event) {
           })
         } else if (!user.terms && event.message.text !== '我同意') {
           event.reply([
-            { type: 'text', text: '黑貓宅急便 寄件超簡單，讓你輕鬆預約叫件，最終會給予QR Code,須自行至7-11,OK超商印出託運單' },
+            { type: 'text', text: '黑貓宅急便 寄件超簡單，讓你輕鬆預約叫件，最終會給予QR Code,須自行至7-11超商印出託運單' },
             {
               type: 'template',
               altText: '使用者條款',
@@ -456,8 +456,8 @@ bot.on('message', function (event) {
                   event.reply([
                     {
                       type: 'image',
-                      originalContentUrl: 'https://i.imgur.com/CIfuFDd.png',
-                      previewImageUrl: 'https://i.imgur.com/CIfuFDd.png'
+                      originalContentUrl: 'https://i.imgur.com/SvYAHeP.jpg',
+                      previewImageUrl: 'https://i.imgur.com/SvYAHeP.jpg'
                     }
                   ]).then(function (data) {
                     user.status = 'member'
