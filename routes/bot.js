@@ -8,9 +8,9 @@ var userList = []
 var user = []
 
 const bot = linebot({
-  channelId: process.env.CHANNEL_ID || '1653599208',
-  channelSecret: process.env.CHANNEL_SECRET || 'afaee0b417042750892ba943efc985a8',
-  channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN || '+lplVlN6npehzrRbjWBIuD1r+QqlTr4EALlmtTXz9MwLLmUAQlcVChTbhuu3hjleX4ieRa9RaAwLJJFkWJ+Kh7qMIUIpJUPRQXaKY5egkP91sFOtONucFSzUgAAqYUn8IVH4qDXaGEFggxMg9US/TwdB04t89/1O/w1cDnyilFU='
+  channelId: process.env.CHANNEL_ID || '1654139740',
+  channelSecret: process.env.CHANNEL_SECRET || '63feb32a63413dafa6372e1fd7e5d776',
+  channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN || 'IcuZcTEC1Iy5lpFIzHKBwzSmAIbT8k4AGObxz2Cy05u9pUMXh7rzZh+VJWiVcJ6awrWcTq4M+qbUzJw8IxTpmHK1fs+kMSEXC7ngB+yzz8rF84RGXBVRfXF7W/aa7ZUgY0F+U/yieEgjObX52OAyJwdB04t89/1O/w1cDnyilFU='
 })
 
 // define the home page route

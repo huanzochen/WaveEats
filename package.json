@@ -1,11 +1,11 @@
 {
-  "name": "linebot_blackcat",
+  "name": "waveeats",
   "version": "1.0.0",
-  "description": "linebot for blackcat",
+  "description": "linebot for waveeats",
   "engines": {
     "node": "10.19.0"
   },
-  "main": "blackcat.js",
+  "main": "waveeats.js",
   "dependencies": {
     "dotenv": "^8.2.0",
     "ejs": "^3.0.1",
@@ -27,12 +27,14 @@
     "eslint-plugin-standard": "^4.0.1"
   },
   "scripts": {
-    "start": "node blackcat.js",
-    "test": "npx eslint routes/bot.js --fix",
-    "dev": "nodemon blackcat.js"
+    "start": "node waveeats.js",
+    "eslint": "npx eslint routes/bot.js --fix",
+    "dev": "nodemon waveeats.js"
   },
   "keywords": [
-    "linebot"
+    "linebot",
+    "wavenet",
+    "waveeats"
   ],
   "author": "TZUCHUAN-HUANG",
   "license": "APACHE LICENSE, VERSION 2.0"

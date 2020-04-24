@@ -1,1 +1,1 @@
-web: node blackcat.js
+web: node waveeats.js

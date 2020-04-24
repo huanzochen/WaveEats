@@ -1,8 +1,9 @@
 require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
-const botRouter = require('./routes/bot')
 const path = require('path')
+
+const botRouter = require('./routes/bot')
 
 
 // LIFF
