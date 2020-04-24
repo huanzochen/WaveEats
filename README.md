@@ -1,8 +1,9 @@
-## project_blackcat
+## WaveEats
 
 # 說明:
-這個專案目前部署在Heroku上
-一隻會說話的linebot
+因為中午都不知道要吃什麼而誕生出的一個幫你解決選擇困難症的 Bot
+
+這隻機器人的前身是 黑貓宅急便, 因此裡面會有一些垃圾, 緩慢刪除中...
 
 ## Require:
 LINE Channel (需至LINE Developer申請):
@@ -10,11 +11,11 @@ LINE Channel (需至LINE Developer申請):
 - messaging API
 
 others: 
-- nodejs 10.10.0  
+- nodejs 10.19.0  
 
 ## Debug
 
-查看log的方法:
+trace log 的方法 ( on Heroku )
 ```
 heroku login
 heroku logs --tail -a -app_name
@@ -23,7 +24,7 @@ heroku logs --tail -a -app_name
 // heroku logs --tail -a linebot-blackcat
 ```
 
-## ngrok (本地偵錯)
+## ngrok ( local debug)
 怎麼在本地偵錯?
 請參閱 https://ngrok.com/   
 一個可以將流量導向到本地的服務 

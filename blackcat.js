@@ -29,6 +29,6 @@ app.use('/linewebhook', parser, botRouter)
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
-app.listen(process.env.PORT || 3201, function () {
+app.listen(process.env.PORT || 3200, function () {
   console.log('LineBot is running.')
 })

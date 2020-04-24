@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "linebot for blackcat",
   "engines": {
-    "node": "10.10.0"
+    "node": "10.19.0"
   },
   "main": "blackcat.js",
   "dependencies": {
@@ -29,11 +29,11 @@
   "scripts": {
     "start": "node blackcat.js",
     "test": "npx eslint routes/bot.js --fix",
-    "dev": "node nodemon blackcat.js"
+    "dev": "nodemon blackcat.js"
   },
   "keywords": [
     "linebot"
   ],
   "author": "TZUCHUAN-HUANG",
-  "license": "ISC"
+  "license": "APACHE LICENSE, VERSION 2.0"
 }
